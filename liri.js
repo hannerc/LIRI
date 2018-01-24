@@ -14,6 +14,8 @@ var Spotify = require('node-spotify-api');
 
 const inquirer = require("inquirer");
 
+const fs = require('fs');
+
 
  inquirer
   .prompt([ 
@@ -25,7 +27,20 @@ const inquirer = require("inquirer");
   .then(function(inquirerResponse) {
   	
   	if (inquirerResponse.command === "my-tweets"){
-  		mytweets();
+  		inquirer
+		  .prompt([
+		    {
+		      type: "input",
+		      message: "What screen name? @",
+		      name: "username" 
+		  	}])
+		  .then(function(username){
+		  	if (username.username === ""){
+		  	mytweets("Chr1sH4nner");;
+		  }else{
+		  	mytweets(username.username);;
+		  }
+		 });
   	}else if(inquirerResponse.command === "spotify-this-song"){
   		console.log("Spotify");
   		inquirer
@@ -59,7 +74,7 @@ const inquirer = require("inquirer");
 		  }
 		 });
   	}else if(inquirerResponse.command === "do-what-it-says"){
-  		console.log("do");
+  		doWhatItSays();
   	};
 
   });
@@ -104,16 +119,49 @@ function OMDB(moviename){
 		console.log('Plot: ', JSON.parse(body).Plot);
 		console.log('Actors: ', JSON.parse(body).Actors);
 	}
-})
-};
-
-function mytweets(){
-
-var params = {screen_name: 'Chr1sH4nner', count:20};
-client.get('statuses/user_timeline', params, function (error, tweets, response) {
-  if (!error) {
-    console.log(chalk.bgBlue(chalk.bold(chalk.white(tweets[0].text))) + chalk.bgGreen(chalk.bold(chalk.white("\n Created at  " + tweets[0].created_at))));
-  }
 });
-
 };
+
+function mytweets(username){
+
+var params = {screen_name: username, count:20};
+
+client.get('statuses/user_timeline', params, function (error, tweets, response) {
+  		if (!error) {
+  			for (i=0; i<tweets.length; i++){
+  		//console.log(tweets[i].text)
+  		console.log(chalk.blue(chalk.bold(((i+1)+" "+tweets[i].text))) + chalk.green(chalk.bold(("\n Created at  " + tweets[i].created_at))));	
+  	};
+  };
+});
+};
+
+
+
+function doWhatItSays(){
+
+	fs.readFile('random.txt', 'utf8', (err, data) => {
+	  if (err) throw err;
+	  //console.log(typeof(data));
+	  var doThis = data.split(",");
+	  //console.log(doThis);
+	  var operation = doThis[0];
+	  //console.log(operation);
+	  var stringArray = doThis.slice(1);
+	  var Searchstring = stringArray.join(" ")
+	  //console.log(Searchstring);
+
+	  if (operation = "spotify-this-song"){
+	  	spotify(Searchstring);
+	  }else if(operation = "movie-this"){
+	  	OMDB(Searchstring);
+	  }else if(operation = "my-tweets"){
+	  	mytweets();
+	  }
+
+});
+}
+
+
+
+

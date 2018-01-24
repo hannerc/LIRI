@@ -18,6 +18,8 @@
   "homepage": "https://github.com/hannerc/LIRI#readme",
   "dependencies": {
     "chalk": "^2.3.0",
+    "fs": "0.0.1-security",
+    "fs-": "^1.0.0",
     "inquirer": "^5.0.1",
     "node-spotify-api": "^1.0.7",
     "request": "^2.83.0",
