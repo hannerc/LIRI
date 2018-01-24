@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/hannerc/LIRI/issues"
   },
-  "homepage": "https://github.com/hannerc/LIRI#readme"
+  "homepage": "https://github.com/hannerc/LIRI#readme",
+  "dependencies": {
+    "chalk": "^2.3.0",
+    "request": "^2.83.0",
+    "spotify": "^0.3.0",
+    "twitter": "^1.7.1"
+  }
 }
