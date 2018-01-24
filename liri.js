@@ -8,6 +8,8 @@ var keys = require('./keys.js');
  
 var client = new Twitter(keys);
 
+var request = require('request');
+
 var Spotify = require('node-spotify-api');
 
 const inquirer = require("inquirer");
@@ -34,15 +36,28 @@ const inquirer = require("inquirer");
 		      name: "song" 
 		  	}])
 		  .then(function(songname){
-
 		  	if (songname.song === ""){
-		  	console.log("Spotify " + "The Sign");
+		  	spotify("The Sign Ace of Base");;
 		  }else{
 		  	spotify(songname.song);
 		  }
 		 });
   	}else if(inquirerResponse.command === "movie-this"){
   		console.log("Movie This")
+  		inquirer
+		  .prompt([
+		    {
+		      type: "input",
+		      message: "What movie?",
+		      name: "movie" 
+		  	}])
+		  .then(function(moviename){
+		  	if (moviename.movie === ""){
+		  	OMDB("Mr. Nobody");;
+		  }else{
+		  	OMDB(moviename.movie);
+		  }
+		 });
   	}else if(inquirerResponse.command === "do-what-it-says"){
   		console.log("do");
   	};
@@ -71,7 +86,27 @@ console.log("Open in Spotify "+ data.tracks.items[0].album.artists[0].external_u
 });
 }
 
- 
+function OMDB(moviename){
+	request('http://www.omdbapi.com/?apikey=40e9cece&t='+moviename, function (error, response, body) {
+	
+	if (error){
+		console.log('error:', error); // Print the error if one occurred
+	}else{
+		//console.log(JSON.parse(body));
+		console.log('Title: ' + JSON.parse(body).Title);
+		console.log('Rating: ', JSON.parse(body).Ratings[0].Source + " " + JSON.parse(body).Ratings[0].Value);
+		if(typeof JSON.parse(body).Ratings[1] !== 'undefined') {
+    // does exist
+   		console.log('Rating: ', JSON.parse(body).Ratings[1].Source + " " + JSON.parse(body).Ratings[1].Value);
+		}
+		console.log('Country: ', JSON.parse(body).Country);
+		console.log('Language: ', JSON.parse(body).Language);
+		console.log('Plot: ', JSON.parse(body).Plot);
+		console.log('Actors: ', JSON.parse(body).Actors);
+	}
+})
+};
+
 function mytweets(){
 
 var params = {screen_name: 'Chr1sH4nner', count:20};
