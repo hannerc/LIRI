@@ -38,7 +38,7 @@ const fs = require('fs');
 		  	if (username.username === ""){
 		  	mytweets("Chr1sH4nner");;
 		  }else{
-		  	mytweets(username.username);;
+		  	mytweets(username.username);
 		  }
 		 });
   	}else if(inquirerResponse.command === "spotify-this-song"){
@@ -144,19 +144,27 @@ function doWhatItSays(){
 	  if (err) throw err;
 	  //console.log(typeof(data));
 	  var doThis = data.split(",");
-	  //console.log(doThis);
+	  
 	  var operation = doThis[0];
-	  //console.log(operation);
-	  var stringArray = doThis.slice(1);
-	  var Searchstring = stringArray.join(" ")
-	  //console.log(Searchstring);
 
-	  if (operation = "spotify-this-song"){
+	  var stringArray = doThis.slice(1);
+	  var midstring = stringArray.join(" ")
+	  
+	  var Searchstring = midstring.substr(1).slice(0,-1);
+	  
+	  var Tweetstring = Searchstring.substr(1).slice(0,-1);
+	
+	  if (operation === "spotify-this-song"){
+	  	console.log("Spotify: "+Searchstring);
 	  	spotify(Searchstring);
-	  }else if(operation = "movie-this"){
+	  }else if(operation === "movie-this"){
+	  	console.log("Movie: "+Searchstring);
 	  	OMDB(Searchstring);
-	  }else if(operation = "my-tweets"){
-	  	mytweets();
+	  }else if(operation === 'my-tweets'){
+	  	//console.log("hey");
+	  	console.log("Twitter: "+Searchstring);
+		mytweets(Tweetstring);
+
 	  }
 
 });
